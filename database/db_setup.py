@@ -30,9 +30,13 @@ def build_db():
     print(f"Database build complete: {db_path} is live.")
 
 def execute_query(sql_string: str)->pd.DataFrame:
+    clean_sql = sql_string.strip()
+    if not (clean_sql.upper().startswith("SELECT") or clean_sql.upper().startswith("WITH")):
+        print("SQL Execution Blocked: Only read-only SELECT or WITH queries are permitted.")
+        return pd.DataFrame()
     engine=create_engine(f"sqlite:///{db_path}")
     try:
-        return pd.read_sql_query(sql_string,engine)
+        return pd.read_sql_query(clean_sql, engine)
     except Exception as e:
         print(f"SQL Execution Error: {e}")
         return pd.DataFrame()

@@ -8,7 +8,7 @@ dowhy
 scikit-learn
 
 # Intelligence Layer & Security
-google-generativeai
+google-genai
 python-dotenv
 
 # Frontend Web Interface

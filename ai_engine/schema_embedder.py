@@ -15,26 +15,38 @@ TABLE_SCHEMAS = {
     "order_payments": "table 'order_payments' with columns: order_id, payment_sequential, payment_type, payment_installments, payment_value. Useful for financial transactions, installments, and payment methods."
 }
 
+CACHED_SCHEMA_EMBEDDINGS = {}
+
 def get_embedding(text: str) -> list:
     """Generates vector embeddings using Gemini, with a deterministic local fallback for safety."""
-    try:
-        response = client.models.embed_content(
-            model="gemini-embedding-001",
-            contents=text,
-            config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT")
-        )
-        return response.embeddings[0].values
-    except Exception:
-        np.random.seed(abs(hash(text)) % (2**32))
-        return list(np.random.normal(0, 1, 768))
+    for model_name in ["text-embedding-004", "gemini-embedding-001"]:
+        try:
+            response = client.models.embed_content(
+                model=model_name,
+                contents=text,
+                config=types.EmbedContentConfig(task_type="RETRIEVAL_DOCUMENT")
+            )
+            return response.embeddings[0].values
+        except Exception:
+            continue
+    np.random.seed(abs(hash(text)) % (2**32))
+    return list(np.random.normal(0, 1, 768))
+
+def get_schema_embeddings() -> dict:
+    """Lazily computes and caches static schema embeddings to avoid redundant API calls."""
+    global CACHED_SCHEMA_EMBEDDINGS
+    if not CACHED_SCHEMA_EMBEDDINGS:
+        for t_name, s_desc in TABLE_SCHEMAS.items():
+            CACHED_SCHEMA_EMBEDDINGS[t_name] = get_embedding(s_desc)
+    return CACHED_SCHEMA_EMBEDDINGS
 
 def retrieve_relevant_tables(user_query: str, top_k: int = 3) -> str:
-    """RAG Core: Finds the most relevant tables for the user's question."""
+    """RAG Core: Finds the most relevant tables for the user's question using cosine similarity."""
     query_embedding = get_embedding(user_query)
+    table_embeddings = get_schema_embeddings()
     similarities = {}
     
-    for table_name, schema_desc in TABLE_SCHEMAS.items():
-        table_embedding = get_embedding(schema_desc)
+    for table_name, table_embedding in table_embeddings.items():
         dot_product = np.dot(query_embedding, table_embedding)
         norm_a = np.linalg.norm(query_embedding)
         norm_b = np.linalg.norm(table_embedding)
