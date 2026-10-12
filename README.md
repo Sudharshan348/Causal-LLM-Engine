@@ -1,196 +1,363 @@
-# 🧠 Enterprise Causal AI Engine
+# Enterprise Causal AI Engine
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![LLM](https://img.shields.io/badge/Google%20GenAI-Gemini%203.8%20Flash-orange.svg)](https://ai.google.dev/)
+[![LLM](https://img.shields.io/badge/Google%20GenAI-Gemini-orange.svg)](https://ai.google.dev/)
 [![Causal Inference](https://img.shields.io/badge/Engine-Custom%20Hajek--IPTW%20%2B%20DoWhy-green.svg)](https://github.com/py-why/dowhy)
 [![Frontend](https://img.shields.io/badge/UI-Streamlit-red.svg)](https://streamlit.io/)
 [![Database](https://img.shields.io/badge/Database-SQLite%20(Olist%20E--Commerce)-lightgrey.svg)](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
 
-An autonomous enterprise-grade Causal AI system that translates natural language business questions into multi-table SQL queries via semantic RAG, queries live transactional databases, and mathematically estimates the **Average Treatment Effect (ATE)** using proprietary **Hajek-Normalized Inverse Probability of Treatment Weighting (IPTW)** and statistical refutation stress-testing.
+An autonomous Causal AI system that translates natural-language business questions into multi-table SQL queries using semantic Retrieval-Augmented Generation (RAG), retrieves transactional data, and estimates the **Average Treatment Effect (ATE)** using Hajek-normalized Inverse Probability of Treatment Weighting (IPTW) and statistical refutation tests.
 
 ---
 
-## 📌 Executive Summary
+## Executive Summary
 
-Traditional Machine Learning models optimize for **correlation** rather than **causation**, leading to severe mathematical hallucinations and flawed business decisions (e.g., mistaking ice cream sales as a cause of shark attacks). Conversely, existing econometric causal inference packages require manual SQL writing, manual DAG construction, and PhD-level oversight.
+Traditional machine learning identifies associations in data, but associations do not necessarily establish causal relationships. Business decisions based only on correlations can therefore lead to misleading conclusions.
 
-**Enterprise Causal AI Engine** bridges this gap by delivering an end-to-end autonomous pipeline:
-1. **Natural Language to Causal Graph:** Translates plain-English inquiries into structured causal parameters (`treatment`, `outcome`, `confounders`).
-2. **Autonomous Multi-Table Relational SQL:** Retrieves schemas through semantic vector embeddings and executes joined SQLite queries across 100,000+ real records.
-3. **Proprietary Mathematical Math Engine:** Computes Hajek-normalized propensity-weighted treatment effects paired with bootstrapped confidence intervals.
-4. **Autonomous Causal Discovery:** Standardizes variables to identify whether control variables exert stronger empirical leverage than the requested treatment.
-5. **Scientific Stress Testing:** Evaluates graph robustness using placebo treatment swaps and synthetic common-cause injections.
+The Enterprise Causal AI Engine integrates natural-language processing, relational database querying, and statistical causal inference into a single workflow.
+
+The system provides the following capabilities:
+
+1. **Natural Language to Causal Parameters:** Converts business questions into structured treatment, outcome, and confounder variables.
+2. **Multi-Table Relational SQL:** Retrieves relevant database schemas using semantic embeddings and executes SQL queries across relational tables.
+3. **Mathematical Causal Estimation:** Estimates treatment effects using Hajek-normalized propensity weighting and bootstrap confidence intervals.
+4. **Automated Causal Discovery:** Compares standardized variable impact scores to identify relationships that require further investigation.
+5. **Statistical Stress Testing:** Evaluates model robustness using placebo treatment tests and synthetic common-cause injections.
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
-```
+```text
 User Business Question
-         │
-         ▼
-┌─────────────────────────────────────────────────────────────┐
-│  Tier 1: Intelligent AI & RAG Router (Gemini 3.8 Flash)      │
-│  • Vector embedding of table schemas via text-embedding-004 │
-│  • Cosine similarity semantic table retrieval               │
-│  • JSON Parameter Extraction (Cause, Effect, Controls, SQL) │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│  Tier 2: Relational Database Execution Layer                │
-│  • SQLite multi-table JOINs on 110,000+ Olist e-commerce    │
-│  • Read-only SQL safety guards                              │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│  Tier 3: Mathematical Causal Engine                         │
-│  • Smart Median Continuous Binarization V2                  │
-│  • Logistic Propensity Score Modeling (ROC-AUC Verification)│
-│  • Hajek-Normalized IPTW ATE Estimation                     │
-│  • 50-Iteration Bootstrap Resampling (95% CI & P-Value)     │
-│  • Automated Causal Discovery (Z-Score Standardized Impact) │
-│  • DoWhy Refutation Stress Tests (Placebo & Random Cause)   │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-Interactive Streamlit Analytics Dashboard
+         |
+         v
++-------------------------------------------------------------+
+| Tier 1: Intelligent AI and RAG Router                       |
+|                                                             |
+| - Schema embeddings using text-embedding-004                |
+| - Cosine similarity for semantic table retrieval            |
+| - Structured parameter extraction                           |
+| - Treatment, outcome, confounders, and SQL generation       |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+| Tier 2: Relational Database Execution Layer                 |
+|                                                             |
+| - SQLite relational database                                |
+| - Multi-table SQL JOIN operations                           |
+| - Data extraction and preprocessing                         |
+| - Read-only SQL execution safeguards                        |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+| Tier 3: Mathematical Causal Engine                          |
+|                                                             |
+| - Smart median continuous-treatment binarization            |
+| - Logistic regression propensity-score estimation           |
+| - Hajek-normalized IPTW ATE estimation                      |
+| - Bootstrap confidence intervals and p-values               |
+| - Standardized variable-impact analysis                     |
+| - DoWhy placebo and synthetic-confounder refutation tests   |
++-----------------------------+-------------------------------+
+                              |
+                              v
++-------------------------------------------------------------+
+| Tier 4: Streamlit Analytics Dashboard                       |
+|                                                             |
+| - ATE and confidence intervals                              |
+| - Statistical significance                                  |
+| - Covariate-balance diagnostics                              |
+| - Propensity-model diagnostics                              |
+| - Refutation results and analytical insights                |
++-----------------------------+-------------------------------+
+                              |
+                              v
+                    BUSINESS INSIGHTS
 ```
 
 ---
 
-## 🔬 Mathematical Formulation
+## Mathematical Formulation
 
 ### 1. The Fundamental Problem of Causal Inference
-Observational data cannot be evaluated using standard ML metrics like Accuracy or F1-Score because counterfactual outcomes cannot be observed simultaneously for the same unit:
-$$Y_i = T_i Y_i(1) + (1 - T_i) Y_i(0)$$
-We observe either $Y_i(1)$ or $Y_i(0)$, never both.
+
+In observational data, the same observation cannot simultaneously reveal its outcome under treatment and its outcome without treatment.
+
+The observed outcome is represented as:
+
+$$
+Y_i = T_iY_i(1) + (1-T_i)Y_i(0)
+$$
+
+Where:
+
+- \(Y_i\) is the observed outcome.
+- \(T_i \in \{0,1\}\) is the treatment assignment.
+- \(Y_i(1)\) is the potential outcome under treatment.
+- \(Y_i(0)\) is the potential outcome without treatment.
+
+Causal inference estimates the difference between these potential outcomes under the assumptions required by the selected method.
 
 ### 2. Custom Hajek-Normalized IPTW Estimator
-Standard Horvitz-Thompson weighting suffers from high finite-sample variance when propensity scores approach zero:
-$$\hat{\tau}_{\text{HT}} = \frac{1}{N}\sum_{i=1}^N \left( \frac{T_i Y_i}{e(X_i)} - \frac{(1 - T_i) Y_i}{1 - e(X_i)} \right)$$
 
-Our engine implements **Hajek Self-Normalizing Weights**, ensuring that empirical weights sum exactly to 1.0, neutralizing propensity explosion:
-$$\hat{\tau}_{\text{ATE}} = \frac{\sum_{i=1}^N \frac{T_i Y_i}{e(X_i)}}{\sum_{i=1}^N \frac{T_i}{e(X_i)}} - \frac{\sum_{i=1}^N \frac{(1 - T_i) Y_i}{1 - e(X_i)}}{\sum_{i=1}^N \frac{1 - T_i}{1 - e(X_i)}}$$
+The Inverse Probability of Treatment Weighting method estimates propensity scores to account for differences between treatment and control groups.
+
+The propensity score is defined as:
+
+$$
+e(X_i)=P(T_i=1\mid X_i)
+$$
+
+Where \(X_i\) represents the selected confounders.
+
+The treatment and control weights are:
+
+$$
+w_i^{(1)}=\frac{T_i}{e(X_i)}
+$$
+
+$$
+w_i^{(0)}=\frac{1-T_i}{1-e(X_i)}
+$$
+
+The project uses a Hajek-normalized estimator:
+
+$$
+\widehat{ATE} =
+\frac{\sum_{i=1}^{N}\frac{T_iY_i}{e(X_i)}}
+{\sum_{i=1}^{N}\frac{T_i}{e(X_i)}}
+-
+\frac{\sum_{i=1}^{N}\frac{(1-T_i)Y_i}{1-e(X_i)}}
+{\sum_{i=1}^{N}\frac{1-T_i}{1-e(X_i)}}
+$$
+
 Where:
-- $T_i \in \{0, 1\}$ is the treatment assignment.
-- $Y_i$ is the observed outcome.
-- $e(X_i) = P(T_i = 1 \mid X_i)$ is the propensity score estimated via Logistic Regression.
-- Propensity scores are clipped to $[0.01, 0.99]$ to guarantee the Positivity assumption: $0 < P(T=1 \mid X) < 1$.
+
+- \(T_i\) represents treatment assignment.
+- \(Y_i\) represents the observed outcome.
+- \(e(X_i)\) is the propensity score estimated using logistic regression.
+- The first term represents the weighted treatment-group mean.
+- The second term represents the weighted control-group mean.
+
+The difference between these weighted means estimates the Average Treatment Effect under the required causal assumptions.
+
+The documented implementation clips propensity scores to the interval \([0.01,0.99]\) to limit extreme weights. This does not, by itself, guarantee that the positivity assumption is satisfied.
 
 ### 3. Bootstrap Statistical Inference
-To evaluate uncertainty, the engine draws $B = 50$ bootstrap resamples with replacement:
-$$\hat{\text{SE}}(\hat{\tau}) = \sqrt{\frac{1}{B-1} \sum_{b=1}^B \left(\hat{\tau}^{*(b)} - \bar{\tau}^*\right)^2}$$
-$$95\% \text{ CI} = \left[ \hat{\tau} - 1.96 \cdot \hat{\text{SE}}, \; \hat{\tau} + 1.96 \cdot \hat{\text{SE}} \right]$$
-$$p\text{-value} = 2 \left( 1 - \Phi\left( \frac{|\hat{\tau}|}{\hat{\text{SE}}} \right) \right)$$
+
+The engine uses bootstrap resampling to estimate uncertainty in the treatment-effect estimate.
+
+The documented configuration uses \(B=50\) bootstrap samples drawn with replacement.
+
+The bootstrap standard error is calculated as:
+
+$$
+\widehat{SE}(\widehat{ATE}) =
+\sqrt{
+\frac{1}{B-1}
+\sum_{b=1}^{B}
+\left(
+\widehat{ATE}^{*(b)}-\overline{ATE}^{*}
+\right)^2
+}
+$$
+
+The normal-approximation 95% confidence interval is:
+
+$$
+95\%\ CI =
+\left[
+\widehat{ATE}-1.96\widehat{SE},
+\widehat{ATE}+1.96\widehat{SE}
+\right]
+$$
+
+The two-sided p-value under a normal approximation is:
+
+$$
+p =
+2\left[
+1-\Phi\left(
+\frac{|\widehat{ATE}|}{\widehat{SE}}
+\right)
+\right]
+$$
+
+Where \(\Phi\) represents the standard normal cumulative distribution function.
+
+A p-value below 0.05 is commonly treated as statistically significant under the specified test. Statistical significance alone does not establish causality.
 
 ---
 
-## 📊 Benchmark Comparison vs. SOTA (Microsoft Research 2023)
+## Benchmark Comparison
 
-We benchmarked our engine against standard causal pipelines and baseline models from **Microsoft Research (Kıcıman et al., 2023; Sharma & Kıcıman, DoWhy)**:
+The following comparison reproduces the benchmark figures provided in the project documentation. The baseline definitions and evaluation procedure should be checked against the actual experiment code before interpreting these figures as independently verified improvements.
 
-| Metric / Evaluation Criterion | Baseline LLM + Standard DoWhy <br>*(Microsoft Research 2023)* | **Our Proposed Causal Engine** <br>*(Custom Hajek-IPTW + RAG)* | **Relative Improvement** |
-| :--- | :---: | :---: | :---: |
-| **Covariate Balance (SMD) ★ Real Data** | `0.342` *(Severely Biased)* | **`0.021`** *(Balanced < 0.10)* | **93.8% Confounding Bias Purged** 🏆 |
-| **Benchmark Estimation Error ($\sqrt{\text{PEHE}}$)** | `0.1420` | **`0.0149`** | **89.5% Error Reduction ($9.5\times$ More Precise)** |
-| **Placebo Refutation Collapse ($\hat{\tau}_{\text{placebo}}$)** | `0.0480` | **`0.0020`** | **$24\times$ Tighter Placebo Collapse** |
-| **Average Refutation Pass Rate** | `78.4%` | **`83.3%`** *(across 6 real runs)* | **+4.9% Robustness Improvement** |
-| **Average Confounder Balancing (AUC)** | `0.612` | **`0.726`** *(in confounding queries)* | **+18.6% Better Confounder Overlap** |
-| **Autonomous Causal Discovery Ranking** | ❌ Manual (Human expert required) | **✅ Automated** (Standardized z-score alert) | **Full Autonomy** |
+| Metric / Evaluation Criterion | Baseline | Proposed Causal Engine | Reported Comparison |
+| :--- | :---: | :---: | :--- |
+| Covariate Balance (SMD) | `0.342` | `0.021` | 93.8% reduction |
+| Benchmark Estimation Error (PEHE) | `0.1420` | `0.0149` | 89.5% reduction |
+| Placebo Refutation Effect | `0.0480` | `0.0020` | 24x smaller |
+| Average Refutation Pass Rate | `78.4%` | `83.3%` | +4.9 percentage points |
+| Average Confounder-Related AUC | `0.612` | `0.726` | 18.6% increase |
+| Autonomous Causal Discovery | Manual | Automated | Automated variable-impact ranking |
+
+The reported improvements depend on using comparable datasets, treatment definitions, evaluation metrics, and validation procedures for both methods.
 
 ---
 
-## 📈 Empirical Results Across 6 Real-World Test Cases
+## Empirical Results Across 6 Real-World Test Cases
 
-Evaluated on the **Brazilian E-Commerce Public Dataset by Olist** across **>650,000 total transactional records**:
+The project documentation reports experiments using the Brazilian E-Commerce Public Dataset by Olist, which contains multiple relational tables covering orders, products, payments, shipping, and customer reviews.
 
-| Run # | Business Question | Sample Size | Estimated ATE | 95% Confidence Interval | Covariate Balance (SMD) | Propensity AUC | Refutation Pass Rate | Key Empirical Finding |
+The following results preserve the six test cases and their reported values.
+
+| Run | Business Question | Sample Size | Estimated ATE | 95% Confidence Interval | Covariate Balance (SMD) | Propensity AUC | Refutation Pass Rate | Key Empirical Finding |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **1** | **Installments $\rightarrow$ Total Payment Value** <br>*(Control: `payment_sequential`)* | 103,886 | **`+59.7865`** | `[-20.60, +140.17]` | `0.001` (100% Balanced) | `0.500` | `100%` | High basket variance; engine accurately flags directional effect without overclaiming. |
-| **2** | **Freight Value $\rightarrow$ Review Rating** <br>*(Control: `price`, `product_weight_g`)* | 112,372 | **`-0.1326`** | `[-0.1647, -0.1005]` | **`0.021` (< 0.10 Target)** | **`0.716`** | **`100%`** | **Textbook benchmark**: 94.5% bias removed; strictly negative bounds; ideal Positivity overlap. Higher shipping directly depresses reviews. |
-| **3** | **Product Photos $\rightarrow$ Review Rating** <br>*(Control: `price`)* | 110,774 | **`+0.0745`** | `[+0.0579, +0.0911]` | `0.003` (< 0.10 Target) | `0.504` | `100%` | 3-table join; natural quasi-experiment proving rich listing imagery causally lifts customer ratings. |
-| **4** | **Description Length $\rightarrow$ Review Rating** <br>*(Control: `price`, `product_photos_qty`)* | 110,774 | **`+0.0451`** | `[+0.0249, +0.0653]` | `0.015` (< 0.10 Target) | `0.604` | `50%` | **Causal Discovery**: Autonomous ranking revealed photos (`0.0215`) have **2x greater leverage** than text length (`0.0128`). |
-| **5** | **Product Weight $\rightarrow$ Freight Cost** <br>*(Control: `price`)* | 112,632 | **`+4.6150`** | `[+4.1750, +5.0550]` | **`0.019` (< 0.10 Target)** | **`0.736`** | `50%` | Physical causal ground truth; discovered carrier insurance tiers (`price` impact `0.3717`) outweigh physical weight (`0.2107`). |
-| **6** | **Product Length $\rightarrow$ Freight Cost** <br>*(Control: `product_weight_g`)* | 112,632 | **`-2.4567`** | `[-3.0807, -1.8327]` | **`0.024` (< 0.10 Target)** | **`0.825`** | `50%` | **Resolves Spurious Correlation**: Weight (`0.6108`) is 550x more dominant than length (`0.0011`). Isolates mass from dimensions. |
+| 1 | Installments → Total Payment Value (Control: `payment_sequential`) | 103,886 | `+59.7865` | `[-20.60, +140.17]` | `0.001` | `0.500` | `100%` | High basket variance; the interval includes zero, so the direction is uncertain. |
+| 2 | Freight Value → Review Rating (Controls: `price`, `product_weight_g`) | 112,372 | `-0.1326` | `[-0.1647, -0.1005]` | `0.021` | `0.716` | `100%` | Negative estimated effect with a confidence interval excluding zero. |
+| 3 | Product Photos → Review Rating (Control: `price`) | 110,774 | `+0.0745` | `[+0.0579, +0.0911]` | `0.003` | `0.504` | `100%` | Positive estimated effect with reported covariate balance below 0.10. |
+| 4 | Description Length → Review Rating (Controls: `price`, `product_photos_qty`) | 110,774 | `+0.0451` | `[+0.0249, +0.0653]` | `0.015` | `0.604` | `50%` | Variable-impact analysis reports greater standardized impact for product photos than description length. |
+| 5 | Product Weight → Freight Cost (Control: `price`) | 112,632 | `+4.6150` | `[+4.1750, +5.0550]` | `0.019` | `0.736` | `50%` | Positive estimated relationship between product weight and freight cost. |
+| 6 | Product Length → Freight Cost (Control: `product_weight_g`) | 112,632 | `-2.4567` | `[-3.0807, -1.8327]` | `0.024` | `0.825` | `50%` | Variable-impact analysis reports a substantially greater impact score for product weight than product length. |
+
+These values are reported experimental outputs, not independently reproduced results. The causal interpretations depend on treatment definitions, confounder selection, covariate balance, overlap, and other identification assumptions.
+
+A refutation pass rate describes the proportion of configured tests that meet their acceptance criteria. It should not be interpreted as a direct probability that a causal estimate is correct.
 
 ---
 
-## 🛠️ Project Structure
+## Project Structure
 
-```
+```text
 Causal-LLM-Engine/
+|
 ├── ai_engine/
-│   ├── __init__.py
-│   ├── gemini_router.py       # RAG pipeline & Gemini 3.8 Flash structured JSON extraction
-│   └── schema_embedder.py     # Schema vector embedding & semantic cosine table retrieval
+|   ├── __init__.py
+|   ├── gemini_router.py
+|   └── schema_embedder.py
+|
 ├── database/
-│   ├── __init__.py
-│   ├── db_setup.py            # SQLite schema initialization & read-only execution guard
-│   └── olist.db               # Live Olist relational e-commerce database
+|   ├── __init__.py
+|   ├── db_setup.py
+|   └── olist.db
+|
 ├── math_engine/
-│   ├── __init__.py
-│   └── causal_model.py        # Custom Hajek-IPTW, PEHE benchmark, DoWhy refutations & discovery
-├── app.py                     # Interactive Streamlit analytics dashboard
-├── requirements.txt           # Production dependencies
-└── README.md                  # Comprehensive academic & engineering documentation
+|   ├── __init__.py
+|   └── causal_model.py
+|
+├── app.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── README.md
 ```
+
+### File Descriptions
+
+- `ai_engine/gemini_router.py`: Processes natural-language questions and extracts structured analysis parameters.
+- `ai_engine/schema_embedder.py`: Creates schema embeddings and performs semantic table retrieval.
+- `database/db_setup.py`: Initializes the SQLite database and configures database safeguards.
+- `database/olist.db`: Stores the imported Olist relational data.
+- `math_engine/causal_model.py`: Implements propensity weighting, ATE estimation, statistical evaluation, and configured refutation tests.
+- `app.py`: Runs the Streamlit analytics dashboard.
+- `requirements.txt`: Lists the project's Python dependencies.
+- `.env`: Stores local environment configuration.
+- `README.md`: Documents the project and its methodology.
+
+The structure above should be adjusted if the actual repository contains different files or modules.
 
 ---
 
-## 🚀 Installation & Usage
+## Installation and Usage
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Viper777/Causal-LLM-Engine.git
 cd Causal-LLM-Engine
 ```
 
+Replace the repository URL if your current GitHub repository uses a different address.
+
 ### 2. Set Up Virtual Environment
+
+**Linux/macOS**
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
+**Windows PowerShell**
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
 ### 3. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 4. Configure Environment Variables
+
 Create a `.env` file in the root directory:
-```bash
-echo "GEMINI_API_KEY=your_actual_gemini_api_key_here" > .env
+
+```env
+GEMINI_API_KEY=your_actual_gemini_api_key_here
 ```
 
-### 5. Build Database *(One-time setup)*
+Ensure the environment variable name matches the one used by the application.
+
+Do not commit your actual API key to GitHub.
+
+### 5. Build Database (One-Time Setup)
+
 ```bash
-python3 database/db_setup.py
+python database/db_setup.py
 ```
+
+Ensure the Olist source dataset is available at the location expected by the database initialization script.
 
 ### 6. Run the Application
+
 ```bash
 streamlit run app.py
 ```
-Open `http://localhost:8501` in your browser.
+
+Open the local address displayed in the terminal, usually:
+
+`http://localhost:8501`
 
 ---
 
-## 📚 Academic Citation & References
+## Academic Citation and References
 
 ```bibtex
 @article{kiciman2023causal,
   title={Causal Reasoning and Large Language Models: Opening a New Frontier for Causality},
-  author={K{\i}c{\i}man, Emre and Ness, Robert and Sharma, Amit and Tan, Chenhao},
+  author={Kiciman, Emre and Ness, Robert and Sharma, Amit and Tan, Chenhao},
   journal={arXiv preprint arXiv:2304.15044},
   year={2023}
 }
 
 @article{sharma2020dowhy,
   title={DoWhy: An End-to-End Library for Causal Inference},
-  author={Sharma, Amit and K{\i}c{\i}man, Emre},
+  author={Sharma, Amit and Kiciman, Emre},
   journal={arXiv preprint arXiv:2011.04216},
   year={2020}
 }
 ```
+
+Additional resources:
+
+- DoWhy Documentation: https://www.pywhy.org/dowhy/
+- Olist Brazilian E-Commerce Dataset: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
+- Google AI for Developers: https://ai.google.dev/
+- Streamlit Documentation: https://docs.streamlit.io/
