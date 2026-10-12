@@ -92,7 +92,7 @@ def parse_business_question(user_question: str) -> dict:
     max_retries = 2
     response = None
     last_error = None
-    models_to_try = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
+    models_to_try = ["gemini-3.8-flash"]
     
     for model_name in models_to_try:
         for attempt in range(max_retries):
