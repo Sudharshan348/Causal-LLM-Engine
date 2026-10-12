@@ -39,25 +39,34 @@ def parse_business_question(user_question: str) -> dict:
     
     max_retries = 3
     response = None
+    last_error = None
+    models_to_try = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-1.5-flash"]
     
-    for attempt in range(max_retries):
-        try:
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=full_prompt,
-                config=types.GenerateContentConfig(response_mime_type="application/json")
-            )
+    for model_name in models_to_try:
+        for attempt in range(max_retries):
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=full_prompt,
+                    config=types.GenerateContentConfig(response_mime_type="application/json")
+                )
+                if response:
+                    break
+            except Exception as e:
+                last_error = e
+                if "503" in str(e) and attempt < max_retries - 1:
+                    print(f"Server busy on {model_name} (Attempt {attempt + 1}/{max_retries}). Retrying in 2.5s...")
+                    time.sleep(2.5)
+                elif "404" in str(e) or "NOT_FOUND" in str(e):
+                    break
+                else:
+                    print(f"API Routing Error on {model_name}: {str(e)}")
+                    break
+        if response:
             break
-            
-        except Exception as e:
-            if "503" in str(e) and attempt < max_retries - 1:
-                print(f"Server busy (Attempt {attempt + 1}/{max_retries}). Retrying in 2.5 seconds...")
-                time.sleep(2.5)
-            else:
-                print(f"API Routing Error: {str(e)}")
-                return {}
                 
     if not response:
+        print(f"API Routing Error: Failed to generate response with models {models_to_try}. Last error: {str(last_error)}")
         return {}
         
     try:
