@@ -72,8 +72,8 @@ if st.button("Analyze Causal Impact"):
                         delta=f"95% CI: [{ci[0]}, {ci[1]}] | p-value: {p_val}"
                     )
                     
-                    st.markdown("### 📊 Scientific Trust & Validation Metrics (Review III Defense)")
-                    st.caption("Observational data cannot be evaluated with standard ML Accuracy/F1 due to the *Fundamental Problem of Causal Inference*. We prove algorithmic validity using industry-standard causal metrics:")
+                    st.markdown("### 📊 Scientific Trust & Validation Metrics")
+                    st.caption("Observational data cannot be evaluated with standard ML Accuracy/F1 due to the *Fundamental Problem of Causal Inference*. We verify algorithmic validity using industry-standard causal benchmarks:")
                     
                     m_col1, m_col2, m_col3, m_col4 = st.columns(4)
                     
@@ -116,25 +116,7 @@ if st.button("Analyze Causal Impact"):
                         for alt in math_result['alternative_causes']:
                             st.write(f"- Variable **'{alt['variable']}'** has a stronger impact score ({alt['confounder_impact']}) than the requested treatment ({alt['treatment_impact']}).")
 
-                    with st.expander("🎓 Review III Panel Defense Guide (Click for talking points)"):
-                        st.markdown("""
-                        **1. Why no standard Accuracy or F1-Score?**
-                        > *"Traditional ML uses Accuracy to predict outcomes, but Causal AI solves the Fundamental Problem of Causal Inference where counterfactuals cannot be directly observed. Hence, we benchmark using PEHE and refutation stress tests."*
-
-                        **2. PEHE (Precision in Estimation of Heterogeneous Effect):**
-                        > *"When benchmarked against a synthetic ground-truth Data Generating Process (DGP), our custom IPTW engine achieved a near-zero PEHE score, proving that it captures true causality rather than correlational artifacts."*
-
-                        **3. Refutation Pass Rate (Sabotage Test):**
-                        > *"Under DoWhy refutation stress tests, replacing the treatment with random placebo data collapsed the effect towards 0.0, and injecting fake confounders showed minimal drift, yielding a 95%+ Pass Rate."*
-
-                        **4. Propensity Score AUC:**
-                        > *"Our logistic propensity model achieved an AUC between 0.70 and 0.85, confirming strong confounding adjustment while strictly satisfying the Positivity assumption (avoiding deterministic assignment)."*
-
-                        **5. P-Value & 95% Confidence Interval:**
-                        > *"Our bootstrapped standard errors yield a 95% Confidence Interval and p-value, ensuring that treatment effects are statistically distinguished from dataset noise."*
-                        """)
-
-                    with st.expander("🔬 View Raw Statistical Refutation Tests (Panel Defense Logs)"):
+                    with st.expander("🔬 View Statistical Refutation Tests (DoWhy Logs)"):
                         st.text(f"PLACEBO REFUTER (Target ATE = 0.0 | Measured: {placebo_eff})")
                         st.text(math_result.get("placebo_summary", "Not available"))
                         st.text("---")
